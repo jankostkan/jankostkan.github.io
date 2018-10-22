@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jan Kostkan</title>
+    <link>/</link>
+    <description>Recent content on Jan Kostkan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 27 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Apartments</title>
+      <link>/2018/09/27/apartments/</link>
+      <pubDate>Thu, 27 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/27/apartments/</guid>
+      <description>tl;dr sectionXY
+intoductionFinding an apartmant can be quite a long run.
+It can be tough to find the balance between where the apartment is and how the apartment is. There are many factors that come into play, but for our purpose, they can be devided into
+There are many factors that come into play and finding the optimal balance between them is an overwhelming task, if not done systematically.</description>
+    </item>
+    
+    <item>
+      <title>Oscar Speech</title>
+      <link>/2018/03/23/oscar-opeech/</link>
+      <pubDate>Fri, 23 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/03/23/oscar-opeech/</guid>
+      <description>INTRO TEXTwhere did the data come fromwhat I’m gonna do with itwhat is the dataset abouthead(speeches)## # A tibble: 6 x 7## Year Category `Film Title` Winner Presenter `Date &amp;amp; Venue` Speech ## &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; ## 1 1939 ~ Actress Gone with t~ Vivie~ Spencer ~ February 29, ~ &amp;quot;VIVIEN L~## 2 1939 ~ Actress ~ Gone with t~ Hatti~ Fay Bain~ February 29, ~ &amp;quot;HATTIE M~## 3 1941 ~ Actor in~ How Green W~ Donal~ James St~ February 26, ~ &amp;quot;DONALD C~## 4 1941 ~ Actress Suspicion Joan ~ Ginger R~ February 26, ~ &amp;quot;JOAN FON~## 5 1941 ~ Actress ~ The Great L~ Mary ~ Ginger R~ February 26, ~ &amp;quot;MARY AST~## 6 1941 ~ Directing How Green W~ John ~ Cecil B.</description>
+    </item>
+    
+    <item>
+      <title>test_1</title>
+      <link>/1974/09/27/test-1/</link>
+      <pubDate>Fri, 27 Sep 1974 00:00:00 +0000</pubDate>
+      
+      <guid>/1974/09/27/test-1/</guid>
+      <description>library(tidyverse)## -- Attaching packages ------------------------------------------------------------------ tidyverse 1.2.1 --## &amp;lt;U+221A&amp;gt; ggplot2 3.0.0 &amp;lt;U+221A&amp;gt; purrr 0.2.5## &amp;lt;U+221A&amp;gt; tibble 1.4.2 &amp;lt;U+221A&amp;gt; dplyr 0.7.6## &amp;lt;U+221A&amp;gt; tidyr 0.8.1 &amp;lt;U+221A&amp;gt; stringr 1.3.1## &amp;lt;U+221A&amp;gt; readr 1.1.1 &amp;lt;U+221A&amp;gt; forcats 0.3.0## -- Conflicts --------------------------------------------------------------------- tidyverse_conflicts() --## x dplyr::filter() masks stats::filter()## x dplyr::lag() masks stats::lag()
+Noice </description>
+    </item>
+    
+    <item>
+      <title>Jan Kostkan</title>
+      <link>/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>Cognitive Science student at Aarhus University.
+The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.
+ &amp;ndash; test
+ </description>
+    </item>
+    
+  </channel>
+</rss>

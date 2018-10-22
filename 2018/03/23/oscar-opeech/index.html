@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.49.2" />
+
+
+<title>Oscar Speech - Jan Kostkan</title>
+<meta property="og:title" content="Oscar Speech - Jan Kostkan">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/0.jpg"
+         width="50"
+         height="50"
+         alt="JK">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/">Blog</a></li>
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/jan-kostkan-03bb00149/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Oscar Speech</h1>
+
+    
+    <span class="article-date">2018/03/23</span>
+    
+
+    <div class="article-content">
+      <div id="intro-text" class="section level1">
+<h1>INTRO TEXT</h1>
+<ul>
+<li>where did the data come from</li>
+<li>what I’m gonna do with it</li>
+</ul>
+<div id="what-is-the-dataset-about" class="section level2">
+<h2>what is the dataset about</h2>
+<pre class="r"><code>head(speeches)</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   Year   Category  `Film Title` Winner Presenter `Date &amp; Venue` Speech    
+##   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;     
+## 1 1939 ~ Actress   Gone with t~ Vivie~ Spencer ~ February 29, ~ &quot;VIVIEN L~
+## 2 1939 ~ Actress ~ Gone with t~ Hatti~ Fay Bain~ February 29, ~ &quot;HATTIE M~
+## 3 1941 ~ Actor in~ How Green W~ Donal~ James St~ February 26, ~ &quot;DONALD C~
+## 4 1941 ~ Actress   Suspicion    Joan ~ Ginger R~ February 26, ~ &quot;JOAN FON~
+## 5 1941 ~ Actress ~ The Great L~ Mary ~ Ginger R~ February 26, ~ &quot;MARY AST~
+## 6 1941 ~ Directing How Green W~ John ~ Cecil B.~ February 26, ~ &quot;COL. DAR~</code></pre>
+<pre class="r"><code>head(speeches$Speech, 1)</code></pre>
+<pre><code>## [1] &quot;VIVIEN LEIGH:\r\nLadies and gentlemen, please forgive me if my words are inadequate in thanking you for your very great kindness.  If I were to mention all those who have shown me such wonderful generosity through \&quot;Gone with the  Wind\&quot; I should have to entertain you with an oration as long as \&quot;Gone with the  Wind\&quot; itself. So if I may, I should like to devote my thanks on this occasion to that composite figure of energy, courage, and very great kindness, in whom all points of \&quot;Gone with the  Wind\&quot; meet -- Mr. David Selznick.\n&quot;</code></pre>
+<p>For some reason, 20 of our records contain nothing but “None”</p>
+<pre class="r"><code>speeches %&gt;%
+  filter(Speech == &quot;None&quot;) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   Year  Category `Film Title` Winner Presenter `Date &amp; Venue` Speech
+##   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt; 
+## 1 None  None     None         None   None      None           None  
+## 2 None  None     None         None   None      None           None  
+## 3 None  None     None         None   None      None           None  
+## 4 None  None     None         None   None      None           None  
+## 5 None  None     None         None   None      None           None  
+## 6 None  None     None         None   None      None           None</code></pre>
+</div>
+<div id="good-practices" class="section level2">
+<h2>good practices</h2>
+<ul>
+<li>it’s good to have standardized variables</li>
+</ul>
+<pre class="r"><code>speeches_stand &lt;- speeches %&gt;%
+  # standardize variable names
+  dplyr::rename(Title = `Film Title`, Date_Venue = `Date &amp; Venue`) %&gt;% 
+  # split Year column into yyyy and event name
+  tidyr::separate(Year, c(&quot;Year&quot;,&quot;Event&quot;), sep = 5) %&gt;% 
+  # split Date_Venue into date
+  tidyr::separate(Date_Venue, c(&quot;Date&quot;, &quot;Venue&quot;), sep = &quot;;&quot;) %&gt;%
+  # remove records with no speech
+  dplyr::filter(Speech != &quot;None&quot;) %&gt;%
+  # make new variables and edit Year
+  dplyr::mutate(Year = as.integer(Year),
+                # convert into decades(e.g. 1947 minus remainder of deviding 1947 by 10, which is 7)
+                Decade = paste(Year - Year %% 10, &quot;s&quot;, sep = &quot;&quot;))
+
+
+# cleaning the speaches  
+speeches_clean &lt;- speeches_stand %&gt;%
+         # remove &quot;scenic notes&quot; (text inside square brackets that isn&#39;t the speech itself)
+  mutate(Speech_clean = str_remove_all(Speech, &quot;\\[(.*?)\\]&quot;),
+         # remove names (words in all caps)
+         Speech_clean = str_remove_all(Speech_clean, &quot;[A-Z][A-Z]+&quot;),
+         #remove punctuation
+         Speech_clean = str_remove_all(Speech_clean,&quot;[[:punct:]]&quot;), 
+         #remove tabs
+         Speech_clean = str_replace_all(Speech_clean,&quot;[ |\t]{2,}&quot;, &quot; &quot; ), 
+         #remove blanks (there are none, but just for sure)
+         Speech_clean = str_replace(Speech_clean,&quot;^ &quot;, &quot;&quot; ), 
+         # convert all to lowercase
+         Speech_clean = tolower(Speech_clean)) %&gt;%
+        
+         # dialogue detection: first remove initial name (everything before first colon)
+  mutate(no_first_name = str_replace(Speech, &quot;.*:&quot;,&quot;&quot;),
+         # if there are all caps words in the speech after that, it must be a dialog
+         Dialogue = str_detect(no_first_name, &quot;[A-Z][A-Z]+&quot;),
+         # count number of words in speech (number of objects separated by whitespace)
+         Words_n= str_count(Speech_clean, &quot;\\S+&quot;)) %&gt;%
+  # remove deprecated variable
+  select(-no_first_name)</code></pre>
+</div>
+<div id="sentiment-analysis" class="section level2">
+<h2>sentiment analysis</h2>
+<ul>
+<li>introduce tidytext</li>
+</ul>
+<p>plot</p>
+</div>
+</div>
+<div id="bi-grams-wordclouds" class="section level1">
+<h1>BI-GRAMS, WORDCLOUDS</h1>
+<p>making a bi-gram</p>
+<pre class="r"><code>bigrams &lt;- speeches_clean %&gt;%
+  select(-Event) %&gt;%
+  unnest_tokens(bigram, Speech_clean, token = &quot;ngrams&quot;, n = 2)
+
+# sample stopwords
+head(stop_words$word)</code></pre>
+<pre><code>## [1] &quot;a&quot;         &quot;a&#39;s&quot;       &quot;able&quot;      &quot;about&quot;     &quot;above&quot;     &quot;according&quot;</code></pre>
+<p>stopwords</p>
+<pre class="r"><code>oscar_stop &lt;- stop_words %&gt;%
+  filter(lexicon == &quot;SMART&quot;)
+
+bigrams_2 &lt;- bigrams %&gt;%
+  # split into two columns
+  separate(bigram, c(&quot;word1&quot;, &quot;word2&quot;), sep = &quot; &quot;) %&gt;%
+  # filter out stopwords
+  filter(!word1 %in% oscar_stop$word) %&gt;%
+  filter(!word2 %in% oscar_stop$word) %&gt;%
+  # filter out empty records
+  filter(!is.na(word1))
+
+bilist &lt;- bigrams_2 %&gt;%
+  #adding a variable here (e.g. Year) is interesting
+  unite(bigram, word1, word2, sep = &quot; &quot;) %&gt;%
+  count(bigram, sort = T) %&gt;%
+  head(10)</code></pre>
+<p>popular bigrams: plot</p>
+<pre class="r"><code>bilist %&gt;%
+  inner_join(bigrams) %&gt;%
+  ggplot() +
+  geom_density_ridges(aes(x = Year, y = bigram, fill = bigram), scale = 2)+
+  theme_bw()+
+  scale_x_continuous(breaks=seq(1940,2010,10),
+                     limits = c(1939, 2016))+
+  theme(plot.title = element_text(lineheight=.8, face=&quot;bold&quot;),
+        legend.position=&quot;none&quot;)+
+  labs(
+    title = &quot;Ten most used phrases in oscar speeches&quot;, 
+    subtitle = &quot;and some texts mispelled&quot;,
+    x = &quot;year&quot;, 
+    y = &quot;&quot;
+  )</code></pre>
+<p><img src="/post/2018-03-23-oscar-opeech_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

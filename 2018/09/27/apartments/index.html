@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.49.2" />
+
+
+<title>Apartments - Jan Kostkan</title>
+<meta property="og:title" content="Apartments - Jan Kostkan">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/0.jpg"
+         width="50"
+         height="50"
+         alt="JK">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/">Blog</a></li>
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/jan-kostkan-03bb00149/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Apartments</h1>
+
+    
+    <span class="article-date">2018/09/27</span>
+    
+
+    <div class="article-content">
+      <div id="tldr-section" class="section level1">
+<h1>tl;dr section</h1>
+<p>XY</p>
+</div>
+<div id="intoduction" class="section level1">
+<h1>intoduction</h1>
+<p>Finding an apartmant can be quite a long run.</p>
+<p>It can be tough to find the balance between <em>where</em> the apartment is and <em>how</em> the apartment is. There are many factors that come into play, but for our purpose, they can be devided into</p>
+<p>There are many factors that come into play and finding the optimal balance between them is an overwhelming task, if not done systematically. But that’s where R can help us!</p>
+<p>(this is supposed to be a table) ## where - commuting time - inkøbsmugliheder</p>
+<div id="how" class="section level2">
+<h2>how</h2>
+<ul>
+<li>how big</li>
+<li>how expansive</li>
+<li>how many rooms</li>
+<li>what type? (house / apartment / kollegium?)</li>
+</ul>
+<p>Apartment searching sites can be quite useful for answering the <em>how</em> question, but there is one crucial problem: apartment searching sites don’t usually don’t offer many filtering options.</p>
+<p>However, this is something we can easily solve in R!</p>
+</div>
+</div>
+<div id="scrolling-rselenium-getting-links" class="section level1">
+<h1>scrolling RSelenium (getting links)</h1>
+</div>
+<div id="scraping-apartment-info" class="section level1">
+<h1>scraping apartment info</h1>
+</div>
+<div id="cleaning-the-scraped-crap" class="section level1">
+<h1>cleaning the scraped crap</h1>
+<pre class="r"><code>eda &lt;- scraped_en %&gt;%
+  filter(!duplicated(description)) %&gt;% #duplicated() function can handle strings. Rows with unique description are kept.
+  mutate(rent_sqm = rent/sqm, #new variable 1: monthly rent per square meter
+         rent_rooms = rent/rooms) #new variable 2: monthly rent per room
+
+eda[760, 6] &lt;- 10 #filling sqm in
+eda[760, 10] &lt;- eda[760,2]/10 #filling rent_sqm in</code></pre>
+<p>That should cover the costs</p>
+<div id="you-cant-always-win-with-an-uncut-dataset." class="section level3">
+<h3>You can’t always win with an uncut dataset.</h3>
+<p>That’s why we’re deleting that one fucking mansion in Ry</p>
+<pre class="r"><code>eda_outliers &lt;- eda %&gt;%
+  mutate(outlier_rent = case_when(rent &gt; (1.5*IQR(eda$rent)+11604) ~ 1,
+                             rent &lt; (6993 - 1.5*IQR(eda$rent)) ~ 1,
+                             TRUE ~ 0),
+         outlier_sqm = case_when(sqm &gt; (1.5*IQR(eda$sqm)+105) ~ 1,
+                             sqm &lt; (65 - 1.5*IQR(eda$sqm)) ~ 1,
+                             TRUE ~ 0),
+         outlier_rent_sqm = case_when(rent_sqm &gt; (1.5*IQR(eda$rent_sqm)+141.06) ~ 1,
+                             rent_sqm &lt; (88.21 - 1.5*IQR(eda$rent_sqm)) ~ 1,
+                             TRUE ~ 0),
+         outlier_rent_room = case_when(rent_rooms &gt; (1.5*IQR(eda$rent_rooms)+4206.2) ~ 1,
+                             rent_rooms &lt; (2599.6 - 1.5*IQR(eda$rent_rooms)) ~ 1,
+                             TRUE ~ 0))
+
+
+eda_cut &lt;- eda_outliers %&gt;%
+  filter(sqm &lt; 300) %&gt;%
+  filter(rent &lt; 1.5*IQR(eda$rent)+11604)</code></pre>
+<p>JUSTICE!</p>
+<pre class="r"><code>aarhus_dist &lt;- c(&quot;Aarhus C&quot;, &quot;Aarhus N&quot;, &quot;Aarhus V&quot;, &quot;Abyhoj&quot;, &quot;Brabrand&quot;, &quot;Hojbjerg&quot;, &quot;Viby J&quot;, &quot;Risskov&quot;)
+
+eda_aar &lt;- eda_cut %&gt;%
+  mutate(city = ifelse(loc %in% aarhus_dist, &quot;Aarhus&quot;, &quot;Outside&quot;)) %&gt;%
+  mutate(loc = case_when(loc == &quot;Abyhoj&quot; ~ &quot;Aarhus V&quot;, 
+                         TRUE ~ as.character(loc)),
+         loc = factor(loc))</code></pre>
+</div>
+</div>
+<div id="aabyhoej" class="section level1">
+<h1>Aabyhoej</h1>
+<pre class="r"><code>eda_aar %&gt;%
+  filter(city == &quot;Aarhus&quot;) %&gt;%
+  ggplot()+
+  geom_density_ridges(aes(x = rent, y = loc, fill = loc))+
+  theme_bw()+
+  theme(plot.title = element_text(lineheight=.8, face=&quot;bold&quot;))+
+  labs(
+    title = &quot;The rent is too damn high&quot;, 
+    subtitle = &quot;and some texts mispelled&quot;,
+    fill = &quot;district&quot;,
+    x = &quot;monthly rent in DKK&quot;, 
+    y = &quot;&quot;
+  )</code></pre>
+<pre><code>## Picking joint bandwidth of 860</code></pre>
+<p><img src="/post/apartments_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><strong>that’s it folks</strong></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
