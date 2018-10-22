@@ -29,7 +29,8 @@ There are many factors that come into play and finding the optimal balance betwe
       <pubDate>Fri, 23 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/03/23/oscar-opeech/</guid>
-      <description>INTRO TEXTwhere did the data come fromwhat I’m gonna do with itwhat is the dataset abouthead(speeches)## # A tibble: 6 x 7## Year Category `Film Title` Winner Presenter `Date &amp;amp; Venue` Speech ## &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; ## 1 1939 ~ Actress Gone with t~ Vivie~ Spencer ~ February 29, ~ &amp;quot;VIVIEN L~## 2 1939 ~ Actress ~ Gone with t~ Hatti~ Fay Bain~ February 29, ~ &amp;quot;HATTIE M~## 3 1941 ~ Actor in~ How Green W~ Donal~ James St~ February 26, ~ &amp;quot;DONALD C~## 4 1941 ~ Actress Suspicion Joan ~ Ginger R~ February 26, ~ &amp;quot;JOAN FON~## 5 1941 ~ Actress ~ The Great L~ Mary ~ Ginger R~ February 26, ~ &amp;quot;MARY AST~## 6 1941 ~ Directing How Green W~ John ~ Cecil B.</description>
+      <description>Dataset was acquired from kaggle - contains oscar speeches form 1939 to 2016
+what is the dataset abouthead(speeches)## # A tibble: 6 x 7## Year Category `Film Title` Winner Presenter `Date &amp;amp; Venue` Speech ## &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; ## 1 1939 ~ Actress Gone with t~ Vivie~ Spencer ~ February 29, ~ &amp;quot;VIVIEN L~## 2 1939 ~ Actress ~ Gone with t~ Hatti~ Fay Bain~ February 29, ~ &amp;quot;HATTIE M~## 3 1941 ~ Actor in~ How Green W~ Donal~ James St~ February 26, ~ &amp;quot;DONALD C~## 4 1941 ~ Actress Suspicion Joan ~ Ginger R~ February 26, ~ &amp;quot;JOAN FON~## 5 1941 ~ Actress ~ The Great L~ Mary ~ Ginger R~ February 26, ~ &amp;quot;MARY AST~## 6 1941 ~ Directing How Green W~ John ~ Cecil B.</description>
     </item>
     
     <item>
